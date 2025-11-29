@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Spend 1000M Dollar - India Dream Shopping</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;}
+
+    body{
+      background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
+      color:#e5e7eb;
+      min-height:100vh;
+      padding:16px;
+    }
+    .app-container{max-width:1200px;margin:0 auto;}
+
+    header{text-align:center;margin-bottom:16px;}
+    header h1{
+      font-size:2.1rem;font-weight:700;color:#facc15;
+      letter-spacing:0.03em;text-transform:uppercase;margin-bottom:8px;
+    }
+    header p{font-size:0.95rem;color:#9ca3af;}
+
+    .top-stats{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;}
+    .stat-card{
+      flex:1 1 150px;background:rgba(15,23,42,0.96);
+      border-radius:16px;padding:12px 14px;
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .stat-label{font-size:0.8rem;color:#9ca3af;}
+    .stat-value{font-size:1.1rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .stat-balance{color:#4ade80;}
+    .stat-spent{color:#f97373;}
+    .stat-items{color:#38bdf8;}
+
+    .layout{display:grid;grid-template-columns:3fr 1.2fr;gap:16px;}
+    @media(max-width:900px){.layout{grid-template-columns:1fr;}}
+
+    .card{
+      background:rgba(15,23,42,0.98);
+      border-radius:18px;
+      padding:14px;
+      border:1px solid rgba(148,163,184,0.4);
+    }
+
+    .items-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+      gap:10px;
+      margin-top:10px;
+    }
+    .item-card{
+      background:rgba(15,23,42,0.9);
+      padding:10px;
+      border-radius:12px;
+      border:1px solid rgba(55,65,81,0.85);
+      margin-bottom:4px;
+    }
+    .item-emoji{font-size:1.9rem;}
+    .item-name{font-size:0.9rem;font-weight:600;}
+    .item-category{font-size:0.75rem;color:#9ca3af;}
+    .item-price{font-size:0.9rem;}
+    .item-qty{font-size:0.75rem;color:#a5b4fc;}
+
+    .btn-buy{
+      width:100%;padding:6px;margin-top:5px;
+      border:none;border-radius:10px;
+      background:#22c55e;color:#022c22;
+      font-weight:600;font-size:0.8rem;
+    }
+    .btn-buy.disabled{background:#4b5563;color:#9ca3af;}
+
+    .btn-reset{
+      padding:6px 10px;margin-top:6px;
+      border-radius:10px;background:rgba(248,250,252,0.08);
+      color:#e5e7eb;border:1px solid #9ca3af;font-size:0.8rem;
+    }
+
+    .btn-pay{
+      width:100%;padding:8px;
+      background:#3b82f6;
+      color:#fff;border:none;border-radius:999px;
+      margin-top:8px;font-weight:600;font-size:0.85rem;
+    }
+    .btn-pay:disabled{background:#4b5563;color:#9ca3af;}
+
+    .cart-empty{font-size:0.8rem;color:#9ca3af;margin:6px 0;}
+    .cart-table{width:100%;font-size:0.8rem;border-collapse:collapse;margin-top:6px;}
+    .cart-table th,.cart-table td{padding:4px 3px;text-align:left;}
+    .cart-table th{border-bottom:1px solid #4b5563;color:#9ca3af;}
+    .cart-table tr:nth-child(odd){background:rgba(15,23,42,0.9);}
+    .cart-table tr:nth-child(even){background:rgba(15,23,42,0.7);}
+
+    .founder-section{
+      margin-top:18px;padding:14px;
+      border-radius:18px;background:rgba(15,23,42,0.96);
+      border:1px solid rgba(148,163,184,0.4);
+    }
+    .founder-info h3{font-size:1rem;font-weight:600;}
+    .founder-info p{font-size:0.85rem;color:#9ca3af;}
+    .footer-text{text-align:center;font-size:0.75rem;color:#9ca3af;margin-top:6px;}
+
+    /* Payment overlay */
+    .payment-overlay{
+      position:fixed;left:0;top:0;right:0;bottom:0;
+      background:rgba(15,23,42,0.88);
+      display:none;justify-content:center;align-items:center;
+      z-index:50;
+    }
+    .payment-box{
+      width:320px;max-width:90%;
+      background:#020617;
+      border-radius:22px;
+      padding:14px;
+      border:2px solid rgba(148,163,184,0.7);
+    }
+    .payment-box h3{text-align:center;margin-bottom:6px;font-size:0.95rem;}
+    .payment-amount{text-align:center;font-size:1.3rem;font-weight:700;color:#4ade80;margin-bottom:4px;}
+    .payment-text{font-size:0.75rem;color:#9ca3af;text-align:center;margin-bottom:8px;}
+    .payment-btn{
+      width:100%;padding:7px;border:none;border-radius:999px;
+      margin-bottom:6px;font-size:0.85rem;font-weight:600;
+    }
+    .pay-now{background:#22c55e;color:#022c22;}
+    .pay-cancel{background:#111827;color:#e5e7eb;border:1px solid #9ca3af;}
+    .payment-note{font-size:0.7rem;color:#9ca3af;text-align:center;}
+    .payment-success{text-align:center;color:#4ade80;font-size:0.8rem;margin-top:4px;display:none;}
+  </style>
+</head>
+<body>
+<div class="app-container">
+
+  <header>
+    <h1>SPEND 1000M DOLLAR</h1>
+    <p>देखें कि आप $10,000,000,000 (10 अरब डॉलर) वर्चुअल मनी से क्या-क्या खरीद सकते हैं। यह सिर्फ fun है, कोई असली payment नहीं।</p>
+  </header>
+
+  <div class="top-stats">
+    <div class="stat-card">
+      <span class="stat-label">शुरुआती बैलेंस</span>
+      <span class="stat-value">$10,000,000,000</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">बचा हुआ बैलेंस</span>
+      <span id="remaining-balance" class="stat-value stat-balance">$10,000,000,000</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">अब तक खर्च</span>
+      <span id="total-spent" class="stat-value stat-spent">$0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">TOTAL ITEMS</span>
+      <span id="total-items" class="stat-value stat-items">0</span>
+    </div>
+  </div>
+
+  <div class="layout">
+    <!-- LEFT: ITEMS -->
+    <section class="card">
+      <h2>Items की लिस्ट</h2>
+      <button class="btn-reset" id="reset-btn">RESET GAME</button>
+      <div id="items-grid" class="items-grid"></div>
+    </section>
+
+    <!-- RIGHT: CART -->
+    <aside class="card">
+      <h3>Shopping Cart</h3>
+
+      <p id="cart-empty" class="cart-empty">अभी तक आपने कुछ नहीं खरीदा।</p>
+      <table id="cart-table" class="cart-table"></table>
+
+      <p>Remaining: <b id="summary-remaining">$10,000,000,000</b></p>
+      <p>Total Spent: <b id="summary-spent">$0</b></p>
+
+      <button class="btn-pay" id="pay-btn" disabled>PROCEED TO PAYMENT (DEMO)</button>
+    </aside>
+  </div>
+
+  <!-- Founder -->
+  <section class="founder-section">
+    <div class="founder-info">
+      <h3>Founder: Subham Kumar</h3>
+      <p>Spend 1000M Dollar वेबसाइट का पूरा आइडिया और डिज़ाइन <strong>Subham Kumar</strong> द्वारा बनाया गया है।</p>
+    </div>
+  </section>
+
+  <p class="footer-text">यह वेबसाइट केवल entertainment के लिए है — कोई real पैसे का लेन-देन नहीं होता।</p>
+
+</div>
+
+<!-- PAYMENT POPUP -->
+<div class="payment-overlay" id="payment-overlay">
+  <div class="payment-box">
+    <h3>Demo Payment</h3>
+    <div id="pay-amount" class="payment-amount">$0</div>
+    <div class="payment-text">यह सिर्फ demo स्क्रीन है। असली UPI / card payment नहीं होगा।</div>
+
+    <button class="payment-btn pay-now" id="btn-pay-now">Pay Now (Demo)</button>
+    <button class="payment-btn pay-cancel" id="btn-pay-cancel">Cancel</button>
+
+    <div class="payment-note">Payment सिर्फ game के लिए है • कोई real transaction नहीं।</div>
+    <div id="payment-success" class="payment-success">✅ Demo Payment Successful! 🎉</div>
+  </div>
+</div>
+
+<script>
+  // ---- DATA ----
+  var START_BALANCE = 10000000000;
+
+  var items = [
+    { name:"iPhone 16 Pro Max",      category:"Phones",        price:1500,   emoji:"📱" },
+    { name:"Budget 5G Phone",        category:"Phones",        price:250,    emoji:"📱" },
+    { name:"Gaming Laptop",          category:"Electronics",   price:2200,   emoji:"💻" },
+    { name:"Thar 4x4",               category:"Cars",          price:20000,  emoji:"🚙" },
+    { name:"Swift",                  category:"Cars",          price:12000,  emoji:"🚗" },
+    { name:"Fortuner",               category:"Cars",          price:45000,  emoji:"🚙" },
+    { name:"Mumbai Flat",            category:"Real Estate",   price:500000, emoji:"🏙️" },
+    { name:"Goa Trip",               category:"Travel",        price:900,    emoji:"🏖️" }
+  ];
+
+  // ---- STATE ----
+  var remaining = START_BALANCE;
+  var spent = 0;
+  var cart = {}; // index -> {qty,total}
+
+  // ---- HELPERS ----
+  function formatCurrency(x){
+    return x.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
+  }
+
+  function updateStats(){
+    document.getElementById("remaining-balance").innerHTML = formatCurrency(remaining);
+    document.getElementById("total-spent").innerHTML      = formatCurrency(spent);
+    document.getElementById("summary-remaining").innerHTML= formatCurrency(remaining);
+    document.getElementById("summary-spent").innerHTML    = formatCurrency(spent);
+
+    var totalItems = 0;
+    for(var k in cart){ if(cart.hasOwnProperty(k)){ totalItems += cart[k].qty; } }
+    document.getElementById("total-items").innerHTML = totalItems;
+
+    document.getElementById("pay-btn").disabled = (spent === 0);
+  }
+
+  function renderItems(){
+    var box = document.getElementById("items-grid");
+    box.innerHTML = "";
+
+    for(var i=0;i<items.length;i++){
+      var item = items[i];
+      var qty = cart[i] ? cart[i].qty : 0;
+
+      var card = document.createElement("div");
+      card.className = "item-card";
+
+      var html = "";
+      html += '<div class="item-emoji">'+item.emoji+'</div>';
+      html += '<div class="item-name">'+item.name+'</div>';
+      html += '<div class="item-category">'+item.category+'</div>';
+      html += '<div class="item-price">'+formatCurrency(item.price)+'</div>';
+      html += '<div class="item-qty">Quantity: '+qty+'</div>';
+      html += '<button class="btn-buy" data-index="'+i+'">Buy</button>';
+
+      card.innerHTML = html;
+      box.appendChild(card);
+    }
+
+    // buttons click
+    var buttons = box.getElementsByClassName("btn-buy");
+    for(var j=0;j<buttons.length;j++){
+      buttons[j].onclick = function(){
+        var idx = parseInt(this.getAttribute("data-index"),10);
+        buyItem(idx);
+      };
+    }
+  }
+
+  function renderCart(){
+    var table = document.getElementById("cart-table");
+    var empty = document.getElementById("cart-empty");
+    table.innerHTML = "";
+
+    var has = false;
+    var rows = "";
+
+    for(var i in cart){
+      if(cart.hasOwnProperty(i)){
+        has = true;
+        var item = items[i];
+        var entry = cart[i];
+        rows += "<tr>";
+        rows += "<td>"+item.name+"</td>";
+        rows += "<td>"+entry.qty+"</td>";
+        rows += "<td>"+formatCurrency(item.price)+"</td>";
+        rows += "<td>"+formatCurrency(entry.total)+"</td>";
+        rows += "</tr>";
+      }
+    }
+
+    if(!has){
+      empty.style.display = "block";
+    } else {
+      empty.style.display = "none";
+      table.innerHTML = '<tr><th>Item</th><th>Qty</th><th>Price</th><th>Total</th></tr>' + rows;
+    }
+  }
+
+  function buyItem(index){
+    var item = items[index];
+    if(item.price > remaining){
+      alert("इतना बैलेंस नहीं है! कोई सस्ती चीज़ try करें।");
+      return;
+    }
+
+    remaining -= item.price;
+    spent += item.price;
+
+    if(!cart[index]){ cart[index] = {qty:0,total:0}; }
+    cart[index].qty += 1;
+    cart[index].total += item.price;
+
+    updateStats();
+    renderItems();
+    renderCart();
+  }
+
+  function resetGame(){
+    remaining = START_BALANCE;
+    spent = 0;
+    cart = {};
+    updateStats();
+    renderItems();
+    renderCart();
+    closePayment();
+  }
+
+  // ---- PAYMENT POPUP ----
+  var overlay = document.getElementById("payment-overlay");
+  var payAmountSpan = document.getElementById("pay-amount");
+  var paySuccess = document.getElementById("payment-success");
+
+  function openPayment(){
+    payAmountSpan.innerHTML = formatCurrency(spent);
+    paySuccess.style.display = "none";
+    overlay.style.display = "flex";
+  }
+  function closePayment(){
+    overlay.style.display = "none";
+  }
+
+  document.getElementById("pay-btn").onclick = function(){
+    if(spent === 0) return;
+    openPayment();
+  };
+
+  document.getElementById("btn-pay-cancel").onclick = function(){
+    closePayment();
+  };
+
+  document.getElementById("btn-pay-now").onclick = function(){
+    // सिर्फ demo – असली payment नहीं
+    paySuccess.style.display = "block";
+  };
+
+  // Reset button
+  document.getElementById("reset-btn").onclick = function(){ resetGame(); };
+
+  // INIT
+  resetGame();
+</script>
+</body>
+</html>
