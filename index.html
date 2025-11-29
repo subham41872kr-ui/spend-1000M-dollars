@@ -2,27 +2,47 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Spend 1000M Dollar - India Dream Shopping</title>
+  <title>Spend 1000M Dollar - Virtual India Shopping Game</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Spend 1000M Dollar - Subham Kumar ka virtual shopping game jisme aapko milte hain $10,000,000,000 (10 arab dollar) aur aap India wali apni pasand ki cheezen kharid kar dekh sakte hain. Sirf fun, koi real payment nahi." />
   <style>
     *{box-sizing:border-box;margin:0;padding:0;font-family:system-ui,sans-serif;}
-
     body{
       background:radial-gradient(circle at top,#1f2937 0,#020617 50%,#000 100%);
-      color:#e5e7eb;
-      min-height:100vh;
-      padding:16px;
+      color:#e5e7eb;min-height:100vh;padding:16px;
     }
     .app-container{max-width:1200px;margin:0 auto;}
 
+    /* HEADER / LOGO */
     header{text-align:center;margin-bottom:16px;}
-    header h1{
-      font-size:2.1rem;font-weight:700;color:#facc15;
-      letter-spacing:0.03em;text-transform:uppercase;margin-bottom:8px;
+    .logo{
+      font-size:2rem;font-weight:800;color:#facc15;
+      letter-spacing:0.06em;text-transform:uppercase;
     }
-    header p{font-size:0.95rem;color:#9ca3af;}
+    .tagline{font-size:0.9rem;color:#9ca3af;margin-top:4px;}
+    .tagline span{color:#4ade80;}
 
-    .top-stats{display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;}
+    /* AD SLOT */
+    .ad-slot{
+      margin:12px auto;
+      max-width:1000px;
+      min-height:60px;
+      border-radius:10px;
+      border:1px dashed rgba(148,163,184,0.6);
+      background:rgba(15,23,42,0.85);
+      font-size:0.75rem;
+      color:#9ca3af;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:6px;
+    }
+    .ad-slot small{opacity:0.9;}
+
+    .top-stats{
+      display:flex;flex-wrap:wrap;gap:12px;margin:16px 0;
+    }
     .stat-card{
       flex:1 1 150px;background:rgba(15,23,42,0.96);
       border-radius:16px;padding:12px 14px;
@@ -44,32 +64,37 @@
       border:1px solid rgba(148,163,184,0.4);
     }
 
-    .items-grid{
-      display:grid;
-      grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
-      gap:10px;
-      margin-top:10px;
-    }
+    .items-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(175px,1fr));gap:10px;margin-top:10px;}
     .item-card{
-      background:rgba(15,23,42,0.9);
-      padding:10px;
-      border-radius:12px;
-      border:1px solid rgba(55,65,81,0.85);
-      margin-bottom:4px;
+      background:rgba(15,23,42,0.9);padding:10px;border-radius:12px;
+      border:1px solid rgba(55,65,81,0.85);margin-bottom:4px;
     }
-    .item-emoji{font-size:1.9rem;}
-    .item-name{font-size:0.9rem;font-weight:600;}
+    .item-emoji{font-size:1.8rem;}
+    .item-name{font-size:0.9rem;font-weight:600;margin-top:2px;}
     .item-category{font-size:0.75rem;color:#9ca3af;}
-    .item-price{font-size:0.9rem;}
-    .item-qty{font-size:0.75rem;color:#a5b4fc;}
+    .item-price{font-size:0.9rem;margin-top:4px;}
+    .item-qty{font-size:0.75rem;color:#a5b4fc;margin-top:2px;}
 
     .btn-buy{
-      width:100%;padding:6px;margin-top:5px;
+      width:100%;padding:6px;margin-top:6px;
       border:none;border-radius:10px;
       background:#22c55e;color:#022c22;
       font-weight:600;font-size:0.8rem;
     }
     .btn-buy.disabled{background:#4b5563;color:#9ca3af;}
+
+    .aff-links{
+      margin-top:4px;display:flex;gap:4px;flex-wrap:wrap;
+    }
+    .aff-btn{
+      flex:1 1 45%;
+      text-decoration:none;text-align:center;
+      font-size:0.72rem;font-weight:500;
+      padding:4px 6px;border-radius:999px;
+      border:1px solid rgba(148,163,184,0.7);
+    }
+    .aff-amz{background:#111827;color:#fbbf24;}
+    .aff-flip{background:#0f172a;color:#38bdf8;}
 
     .btn-reset{
       padding:6px 10px;margin-top:6px;
@@ -101,7 +126,7 @@
     .founder-info p{font-size:0.85rem;color:#9ca3af;}
     .footer-text{text-align:center;font-size:0.75rem;color:#9ca3af;margin-top:6px;}
 
-    /* Payment overlay */
+    /* Payment popup */
     .payment-overlay{
       position:fixed;left:0;top:0;right:0;bottom:0;
       background:rgba(15,23,42,0.88);
@@ -118,10 +143,7 @@
     .payment-box h3{text-align:center;margin-bottom:6px;font-size:0.95rem;}
     .payment-amount{text-align:center;font-size:1.3rem;font-weight:700;color:#4ade80;margin-bottom:4px;}
     .payment-text{font-size:0.75rem;color:#9ca3af;text-align:center;margin-bottom:8px;}
-    .payment-btn{
-      width:100%;padding:7px;border:none;border-radius:999px;
-      margin-bottom:6px;font-size:0.85rem;font-weight:600;
-    }
+    .payment-btn{width:100%;padding:7px;border:none;border-radius:999px;margin-bottom:6px;font-size:0.85rem;font-weight:600;}
     .pay-now{background:#22c55e;color:#022c22;}
     .pay-cancel{background:#111827;color:#e5e7eb;border:1px solid #9ca3af;}
     .payment-note{font-size:0.7rem;color:#9ca3af;text-align:center;}
@@ -132,9 +154,16 @@
 <div class="app-container">
 
   <header>
-    <h1>SPEND 1000M DOLLAR</h1>
-    <p>देखें कि आप $10,000,000,000 (10 अरब डॉलर) वर्चुअल मनी से क्या-क्या खरीद सकते हैं। यह सिर्फ fun है, कोई असली payment नहीं।</p>
+    <div class="logo">SPEND 1000M DOLLAR</div>
+    <p class="tagline">
+      Virtual India Shopping Game • <span>$10,000,000,000</span> खर्च करके देखो — सिर्फ fun, कोई असली payment नहीं।
+    </p>
   </header>
+
+  <!-- TOP AD SPACE (for Google AdSense later) -->
+  <div class="ad-slot">
+    <small>Ad Space – Yahan baad mein aap Google AdSense ka code paste kar sakte hain.</small>
+  </div>
 
   <div class="top-stats">
     <div class="stat-card">
@@ -158,35 +187,55 @@
   <div class="layout">
     <!-- LEFT: ITEMS -->
     <section class="card">
-      <h2>Items की लिस्ट</h2>
+      <h2>Items की लिस्ट (Virtual)</h2>
+      <p style="font-size:0.8rem;color:#9ca3af;margin-top:4px;">
+        ऊपर से virtual Buy पर click karne se sirf game ke andar kharidari hoti hai. Niche jo Amazon / Flipkart buttons hain,
+        woh <strong>affiliate links</strong> ke liye rahenge (real shopping ke liye).
+      </p>
       <button class="btn-reset" id="reset-btn">RESET GAME</button>
+
       <div id="items-grid" class="items-grid"></div>
     </section>
 
-    <!-- RIGHT: CART -->
+    <!-- RIGHT: CART + SIDE AD -->
     <aside class="card">
       <h3>Shopping Cart</h3>
 
       <p id="cart-empty" class="cart-empty">अभी तक आपने कुछ नहीं खरीदा।</p>
       <table id="cart-table" class="cart-table"></table>
 
-      <p>Remaining: <b id="summary-remaining">$10,000,000,000</b></p>
+      <p style="margin-top:6px;">Remaining: <b id="summary-remaining">$10,000,000,000</b></p>
       <p>Total Spent: <b id="summary-spent">$0</b></p>
 
       <button class="btn-pay" id="pay-btn" disabled>PROCEED TO PAYMENT (DEMO)</button>
+
+      <!-- SIDE AD SLOT -->
+      <div class="ad-slot" style="margin-top:10px;">
+        <small>Side Ad – yahan 300x250 ya responsive AdSense ad lag sakta hai.</small>
+      </div>
     </aside>
+  </div>
+
+  <!-- BOTTOM AD SLOT -->
+  <div class="ad-slot">
+    <small>Bottom Ad – yahan bhi ek banner ad (AdSense) ya affiliate banner rakh sakte hain.</small>
   </div>
 
   <!-- Founder -->
   <section class="founder-section">
     <div class="founder-info">
       <h3>Founder: Subham Kumar</h3>
-      <p>Spend 1000M Dollar वेबसाइट का पूरा आइडिया और डिज़ाइन <strong>Subham Kumar</strong> द्वारा बनाया गया है।</p>
+      <p>
+        Spend 1000M Dollar वेबसाइट का पूरा आइडिया और डिज़ाइन
+        <strong>Subham Kumar</strong> द्वारा बनाया गया है। यह वेबसाइट केवल
+        entertainment और imagination के लिए है – कोई भी real पैसे का transaction नहीं होता।
+      </p>
     </div>
   </section>
 
-  <p class="footer-text">यह वेबसाइट केवल entertainment के लिए है — कोई real पैसे का लेन-देन नहीं होता।</p>
-
+  <p class="footer-text">
+    Spend 1000M Dollar • Virtual India Shopping Game • Made with ❤️ by Subham Kumar
+  </p>
 </div>
 
 <!-- PAYMENT POPUP -->
@@ -208,23 +257,48 @@
   // ---- DATA ----
   var START_BALANCE = 10000000000;
 
+  // NOTE: affiliate links abhi "#"-par hain.
+  // Jab aap Amazon / Flipkart ka real affiliate link bana lo,
+  // to neeche amazonLink / flipkartLink me usko daal sakte ho.
   var items = [
-    { name:"iPhone 16 Pro Max",      category:"Phones",        price:1500,   emoji:"📱" },
-    { name:"Budget 5G Phone",        category:"Phones",        price:250,    emoji:"📱" },
-    { name:"Gaming Laptop",          category:"Electronics",   price:2200,   emoji:"💻" },
-    { name:"Thar 4x4",               category:"Cars",          price:20000,  emoji:"🚙" },
-    { name:"Swift",                  category:"Cars",          price:12000,  emoji:"🚗" },
-    { name:"Fortuner",               category:"Cars",          price:45000,  emoji:"🚙" },
-    { name:"Mumbai Flat",            category:"Real Estate",   price:500000, emoji:"🏙️" },
-    { name:"Goa Trip",               category:"Travel",        price:900,    emoji:"🏖️" }
+    {
+      name:"iPhone 16 Pro Max", category:"Phones", price:1500, emoji:"📱",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Budget 5G Phone", category:"Phones", price:250, emoji:"📱",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Gaming Laptop", category:"Electronics", price:2200, emoji:"💻",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Mahindra Thar 4x4", category:"Cars", price:20000, emoji:"🚙",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Maruti Swift", category:"Cars", price:12000, emoji:"🚗",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Toyota Fortuner", category:"Cars", price:45000, emoji:"🚙",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Sea-facing Flat, Mumbai", category:"Real Estate", price:500000, emoji:"🏙️",
+      amazonLink:"#", flipkartLink:"#"
+    },
+    {
+      name:"Goa Trip with Friends", category:"Travel", price:900, emoji:"🏖️",
+      amazonLink:"#", flipkartLink:"#"
+    }
   ];
 
-  // ---- STATE ----
   var remaining = START_BALANCE;
   var spent = 0;
   var cart = {}; // index -> {qty,total}
 
-  // ---- HELPERS ----
   function formatCurrency(x){
     return x.toLocaleString("en-US",{style:"currency",currency:"USD",maximumFractionDigits:0});
   }
@@ -259,13 +333,18 @@
       html += '<div class="item-category">'+item.category+'</div>';
       html += '<div class="item-price">'+formatCurrency(item.price)+'</div>';
       html += '<div class="item-qty">Quantity: '+qty+'</div>';
-      html += '<button class="btn-buy" data-index="'+i+'">Buy</button>';
+      html += '<button class="btn-buy" data-index="'+i+'">Virtual Buy (Game)</button>';
+
+      // Affiliate buttons (real shopping)
+      html += '<div class="aff-links">';
+      html += '<a class="aff-btn aff-amz" href="'+item.amazonLink+'" target="_blank">Amazon (Affiliate)</a>';
+      html += '<a class="aff-btn aff-flip" href="'+item.flipkartLink+'" target="_blank">Flipkart (Affiliate)</a>';
+      html += '</div>';
 
       card.innerHTML = html;
       box.appendChild(card);
     }
 
-    // buttons click
     var buttons = box.getElementsByClassName("btn-buy");
     for(var j=0;j<buttons.length;j++){
       buttons[j].onclick = function(){
@@ -311,7 +390,6 @@
       alert("इतना बैलेंस नहीं है! कोई सस्ती चीज़ try करें।");
       return;
     }
-
     remaining -= item.price;
     spent += item.price;
 
@@ -334,7 +412,7 @@
     closePayment();
   }
 
-  // ---- PAYMENT POPUP ----
+  // Payment popup logic
   var overlay = document.getElementById("payment-overlay");
   var payAmountSpan = document.getElementById("pay-amount");
   var paySuccess = document.getElementById("payment-success");
@@ -348,25 +426,32 @@
     overlay.style.display = "none";
   }
 
-  document.getElementById("pay-btn").onclick = function(){
-    if(spent === 0) return;
-    openPayment();
-  };
+  document.getElementById("pay-btn").onclick = function(){ if(spent>0){ openPayment(); } };
+  document.getElementById("btn-pay-cancel").onclick = function(){ closePayment(); };
+  document.getElementById("btn-pay-now").onclick = function(){ paySuccess.style.display = "block"; };
 
-  document.getElementById("btn-pay-cancel").onclick = function(){
-    closePayment();
-  };
-
-  document.getElementById("btn-pay-now").onclick = function(){
-    // सिर्फ demo – असली payment नहीं
-    paySuccess.style.display = "block";
-  };
-
-  // Reset button
   document.getElementById("reset-btn").onclick = function(){ resetGame(); };
 
   // INIT
   resetGame();
 </script>
+
+<!--
+  🔹 FUTURE: GOOGLE ADSENSE CODE YAHAN DALNA
+  1. AdSense account se apna code copy karo
+  2. Usme jo "data-ad-client" aur "data-ad-slot" hote hain, woh aapke account ke hote hain
+  3. Unko is file me ad-slot ke andar paste kar sakte ho
+
+  Example (sirf structure dikhane ke liye, yeh real code nahi hai):
+
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=YOUR-CLIENT-ID" crossorigin="anonymous"></script>
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="YOUR-CLIENT-ID"
+       data-ad-slot="1234567890"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+-->
 </body>
-</html>
+                                              </html>
